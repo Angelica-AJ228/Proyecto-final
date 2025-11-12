@@ -24,17 +24,32 @@ ResultadoMovimiento VerificarMovimiento(int serie[N], int puntosActuales) {
 	//busca movimientos
 	
 	for (i = 0; i < N; i++) {
+		for (j = i + 1; j < N; j++) {
+			
+			if (r.nuevaSerie[j] == 0) {
+				continue;
+			}
 
-		if (r.nuevaSerie[j] == 0) {
-			continue;
+
+			if (r.nuevaSerie[i] == 0) {
+				r.nuevaSerie[i] = r.nuevaSerie[j];
+				r.nuevaSerie[j] = 0;
+				r.movio = true;
+				continue;
+			}
+		
+			if (r.nuevaSerie[i] == r.nuevaSerie[j]) {
+				int suma = r.nuevaSerie[i] + r.nuevaSerie[j];
+				r.nuevaSerie[i] = suma;
+				r.nuevaserie[j] = 0;
+				r.nuevosPuntos += suma;
+				r.movio = true;
+				break;
+			}
+		
+			break;
 		}
-
-
-		if (r.nuevaSerie[i] == 0) {
-			r.nuevaSerie[i] = r.nuevaSerie[j];
-			r.nuevaSerie[j] = 0;
-			r.movio = true;
-			continue;
-		}
-
-
+	}
+	
+	return r;
+}
