@@ -101,3 +101,28 @@ void generarAleatorio(estado *e) {
 	
 	e->tabla2048[f][c] = valor;	
 }
+
+bool movimientosDisponibles(estado *e) {
+	
+	int i, j;
+	
+	//Revisa si hay espacios vacios
+	
+	for (i = 0; i < N; i++) {
+		for (j = 0; j < N; j++) {
+			if (e->tabla2048[i][j] == 0) {
+				return true;
+			}
+		}
+	}
+
+	for (i = 0; < N; i++) {
+		for (j = 0; j < N - 1; j++) {
+			if (e->tabla2048[i][j] == e->tabla2048[i + 1][j]) {
+				return true;
+			}
+		}
+	}
+
+}
+
