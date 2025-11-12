@@ -116,13 +116,27 @@ bool movimientosDisponibles(estado *e) {
 		}
 	}
 
-	for (i = 0; < N; i++) {
+	//filas
+
+	for (i = 0; i < N; i++) {
 		for (j = 0; j < N - 1; j++) {
-			if (e->tabla2048[i][j] == e->tabla2048[i + 1][j]) {
+			if (e->tabla2048[i][j] == e->tabla2048[i][j + 1]) {
 				return true;
 			}
 		}
 	}
 
+	//columnas
+	
+	for (j = 0; j < N; j++) {
+		
+		for (i = 0; i < N - 1; i++) {
+			if (e->tabla2048[i][j] == e->tabla2048[i + 1][j]) {
+				return true;
+			}
+		}
+	}
+	
+	return false;
 }
 
