@@ -53,3 +53,5 @@ ResultadoMovimiento VerificarMovimiento(int serie[N], int puntosActuales) {
 	
 	return r;
 }
+
+//funcion para reiniciar tablero
