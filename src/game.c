@@ -91,4 +91,13 @@ void generarAleatorio(estado *e) {
 			}
 		}
 	}
+	
+	if (cantidad == 0) return;
+	
+	int pos = rand() % cantidad;
+	int f = libres[pos] / 10;
+	int c = libres[pos] % 10;
+	int valor = (rand() % 10 < 6 ? 2 : 4); //proporcion de probabilidad de los numeros
+	
+	e->tabla2048[f][c] = valor;	
 }
