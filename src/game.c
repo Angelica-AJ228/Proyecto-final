@@ -72,3 +72,23 @@ void TableroVacio(estado *e) {
 	generarAleatorio(e);
 	generarAleatorio(e);
 }
+
+
+//generar los numeros aleatorios
+
+void generarAleatorio(estado *e) {
+	
+	int libres[N*N];
+	int cantidad = 0;
+	int i, j;
+	
+	for (i = 0; i < N; i++) {
+		
+		for (j = 0; j < N; j++) {
+			if (e->tabla2048[i][j] == 0) {
+				libres[cantidad] = i * 10 + j;
+				cantidad++;
+			}
+		}
+	}
+}
