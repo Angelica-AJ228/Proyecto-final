@@ -55,3 +55,20 @@ ResultadoMovimiento VerificarMovimiento(int serie[N], int puntosActuales) {
 }
 
 //funcion para reiniciar tablero
+
+void TableroVacio(estado *e) {
+	int i, j;
+
+	for (i = 0; i < N; i++) {
+		for (j = 0; j < N; j++) {
+			e->tabla2048[i][j] = 0;
+		}
+	}
+	
+	e->puntos = 0;
+	e->tiempo = 0;
+	e->ganador = false;
+	e->perdido = false;
+	generarAleatorio(e);
+	generarAleatorio(e);
+}
