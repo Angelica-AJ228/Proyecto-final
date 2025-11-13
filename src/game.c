@@ -201,5 +201,59 @@ void mover(estado *e, char direccion) {
 			}
 		}
     	}
-
+	
+	
+	for (j = 0; j < N; j++) {
+		int columna[N];
+		
+		for (i = 0; i < N; i++) {
+			columna[i] = e->tabla2048[i][j];
+		}
+		
+		
+		//arriba
+		if (direccion == 'A') {
+			
+			ResultadoMovimiento r = VerificarMovimiento(columna, e->puntos);
+			
+			if (r.movio) {
+				algoSeMovio = true;
+				e->puntos = r.nuevosPuntos;
+				
+				for (int i = 0; i < N; i++) {
+					e->tabla2048[i][j] = r.nuevaSerie[i];
+				}
+			}
+		}
+		
+		// abajo
+		
+		else if (direccion == 'S') {
+			int invertida[N];
+			for (i = 0; i < N; i++) invertida[i] = columna[N - 1 - i];
+			
+			ResultadoMovimiento r = VerificarMovimiento(invertida, e->puntos);
+			
+			if (r.movio) {
+				algoSeMovio = true;
+				e->puntos = r.nuevosPuntos;
+				
+				
+				for (int i = 0; i < N; i++) {
+					
+					e->tabla2048[N - 1 - i][j] = r.nuevaSerie[i];
+				}
+			}
+		}
+	}
+	
+	//si se movio, inserta nuevo
+	
+	if (algoSeMovio) generarAleatorio(e);
+	
+	// actualizar estados
+	
+	e->ganador = verificarGanador(e);
+	e->perdido = !movimientosDisponibles(e);
+}
 
