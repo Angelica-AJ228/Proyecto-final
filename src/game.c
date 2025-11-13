@@ -140,3 +140,66 @@ bool movimientosDisponibles(estado *e) {
 	return false;
 }
 
+bool verificarGanador(estado *e) {
+	
+	int i, j;
+	
+	for (i = 0; i < N; i++) {
+		for (j = 0; j < N; j++) {
+			if (e->tabla2048[i][j] == 2048) {
+				return true;
+			}
+		}
+	}
+	
+	return false;
+}
+
+void mover(estado *e, char direccion) {
+	
+	bool algoSeMovio = false;
+	
+	int i, j;
+	
+	for (i = 0; i < N; i++) {
+		int fila[N];
+		for (j = 0; j < N; j++) {
+			fila[j] = e->tabla2048[i][j];
+		}
+
+        //Izquierda
+	
+		if (direccion == 'E') {
+			ResultadoMovimiento r = VerificarMovimiento(fila, e->puntos);
+		
+			if (r.movio) {
+				algoSeMovio = true;
+				e->puntos = r.nuevosPuntos;
+			
+				for (j = 0; j < N; j++) {
+					e->tabla2048[i][j] = r.nuevaSerie[j];
+				}
+			}
+		}
+
+        	//derecha
+	
+		else if (direccion == 'D') {
+			int invertida[N];
+			for (j = 0; j < N; j++) {
+				invertida[j] = fila[N - 1 - j];
+			}
+		
+			ResultadoMovimiento r = VerificarMovimiento(invertida, e->puntos);
+			if (r.movio) {
+				algoSeMovio = true;
+				e->puntos = r.nuevosPuntos;
+			
+				for (j = 0; j < N; j++) {
+					e->tabla2048[i][N - 1 - j] = r.nuevaSerie[j];
+				}
+			}
+		}
+    	}
+
+
