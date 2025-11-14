@@ -1,6 +1,6 @@
 #include "../include/game.h"
-#include <string.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include <time.h>
 
 // VerificarMovimiento
@@ -220,7 +220,7 @@ void mover(estado *e, char direccion) {
 				algoSeMovio = true;
 				e->puntos = r.nuevosPuntos;
 				
-				for (int i = 0; i < N; i++) {
+				for (i = 0; i < N; i++) {
 					e->tabla2048[i][j] = r.nuevaSerie[i];
 				}
 			}
@@ -230,7 +230,9 @@ void mover(estado *e, char direccion) {
 		
 		else if (direccion == 'S') {
 			int invertida[N];
-			for (i = 0; i < N; i++) invertida[i] = columna[N - 1 - i];
+			for (i = 0; i < N; i++) {
+				nvertida[i] = columna[N - 1 - i];
+			}
 			
 			ResultadoMovimiento r = VerificarMovimiento(invertida, e->puntos);
 			
