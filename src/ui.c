@@ -71,6 +71,20 @@ void ui_run(estado *e) {
 		dibujarTablero(e);
 		dibujarPanel(e);
 
+		if (e->ganador) {
+			DrawText("Ganaste! (ENTER)", 200, 400, 32, YELLOW);
+		} else if (e->perdido) {
+			DrawText("Perdiste (ENTER)", 200, 400, 32, RED);
+		}
+
+		EndDrawing();
+
+	}
+
+	CloseWindow();
+
+}
+
 
 
 
