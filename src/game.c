@@ -41,7 +41,7 @@ ResultadoMovimiento VerificarMovimiento(int serie[N], int puntosActuales) {
 			if (r.nuevaSerie[i] == r.nuevaSerie[j]) {
 				int suma = r.nuevaSerie[i] + r.nuevaSerie[j];
 				r.nuevaSerie[i] = suma;
-				r.nuevaserie[j] = 0;
+				r.nuevaSerie[j] = 0;
 				r.nuevosPuntos += suma;
 				r.movio = true;
 				break;
@@ -86,7 +86,7 @@ void generarAleatorio(estado *e) {
 		
 		for (j = 0; j < N; j++) {
 			if (e->tabla2048[i][j] == 0) {
-				libres[cantidad] = i * 10 + j;
+				libres[cantidad] = i * N + j;
 				cantidad++;
 			}
 		}
@@ -95,9 +95,9 @@ void generarAleatorio(estado *e) {
 	if (cantidad == 0) return;
 	
 	int pos = rand() % cantidad;
-	int f = libres[pos] / 10;
-	int c = libres[pos] % 10;
-	int valor = (rand() % 10 < 6 ? 2 : 4); //proporcion de probabilidad de los numeros
+	int f = libres[pos] / N;
+	int c = libres[pos] % N;
+	int valor = (rand() % 10 < 6) ? 2 : 4; //proporcion de probabilidad de los numeros
 	
 	e->tabla2048[f][c] = valor;	
 }
@@ -231,7 +231,7 @@ void mover(estado *e, char direccion) {
 		else if (direccion == 'S') {
 			int invertida[N];
 			for (i = 0; i < N; i++) {
-				nvertida[i] = columna[N - 1 - i];
+				invertida[i] = columna[N - 1 - i];
 			}
 			
 			ResultadoMovimiento r = VerificarMovimiento(invertida, e->puntos);
