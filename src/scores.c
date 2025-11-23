@@ -29,7 +29,7 @@ void obtenerTop5(int top[5], int *cantidad) {
 
 	fclose(f);
 
-	for (int i = 0l i < n - 1; i++) { //ordenar por BubbleSort
+	for (int i = 0; i < n - 1; i++) { //ordenar por BubbleSort
 		for (int j = i + 1; j < n; j++) {
 			if (lista[j] > lista[i]) {
 				int aux = lista[i];
@@ -39,7 +39,7 @@ void obtenerTop5(int top[5], int *cantidad) {
 		}
 	}
 
-	*cantidad =  (n < 5 ? n : 5);
+	*cantidad =  (n < 5 ? n : 5); //si n < 5 entonces asigna ese n a cantidad, si es mayor no, esto ayuda con el top5
 
 	for (int i = 0; i < *cantidad; i++) {
 		top[i] = lista[i];
