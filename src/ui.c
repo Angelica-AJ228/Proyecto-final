@@ -11,58 +11,55 @@ static Color panel = {60, 120, 170, 255};
 
 //dibujar tablero
 
-void dibujarTablero(estado *e) {
-	int inicioX = 60;
-	int inicioY = 80;
-	int tam = 100;
-	int espacio = 10;
+void dibujarTablero(estado *e, int inicioX, int inicioY, int tam, int espacio) {
 
 	for (int i = 0; i < N; i++) {
 		for (int j = 0; j < N; j++) {
-
+			
 			int x = inicioX + j * (tam + espacio);
 			int y = inicioY + i * (tam + espacio);
-
-			DrawRectangle(x, y, tam, tam, colorCasilla);
-
+			
+			DrawRectangleRounded((Rectangle){x, y, tam, tam}, 0.2f, 8, colorCasilla);
+			
 			if (e->tabla2048[i][j] != 0) {
 				char texto[10];
 				sprintf(texto, "%d", e->tabla2048[i][j]);
-
+				
 				DrawText(texto, x + 30, y + 30, 28, colorNumero);
 			}
 		}
 	}
 }
 
-void dibujarPanel(estado *e) {
+void dibujarPanel(estado *e, int panelX, int panelY) {
 	
-	DrawRectangle(500, 80, 220, 300, panel);
+	DrawRectangleRounded((Rectangle){panelX, panelY, 220, 300}, 0.25f, 12, panel);
 	char puntos[32];
 	
 	sprintf(puntos, "Puntos: %d", e->puntos);
-	DrawText(puntos, 520, 110, 22, WHITE);
+	DrawText(puntos, panelX + 20, panelY + 30, 22, WHITE);
 	
 	char tiempo[32];
 	sprintf(tiempo, "Tiempo: %d s", e->tiempo);
-	DrawText(tiempo, 520, 150, 22, WHITE);
+	DrawText(tiempo, panelX + 20, panelY + 70, 22, WHITE);
 	
 	//top5
 	int top[5];
 	int cant = 0;
 	obtenerTop5(top, &cant);
 	
-	DrawText("Top 5:", 520, 200, 22, WHITE);
+	DrawText("Top 5:", panelX + 20, panelY +120, 22, WHITE);
 	
 	for (int i = 0; i < cant; i++) {
 		char t[32];
 		sprintf(t, "%d. %d", i + 1, top[i]);
-		DrawText(t, 520, 230 + i * 30, 20, WHITE);
+		DrawText(t, panelX +20, panelY + 150 + i * 30, 20, WHITE);
 	}
 }
 
 void ui_run(estado *e) {
-
+	
+	SetConfigFlags(FLAG_WINDOW_RESIZABLE);
 	InitWindow(760, 500, "Juego 2048");
 	SetTargetFPS(60);
 
@@ -91,16 +88,36 @@ void ui_run(estado *e) {
 			}
 		}
 
+		//para hacer dinamico el tablero y centrar
+		int tam = 100;
+		int espacio = 10;
+
+		int anchoTablero = N * tam + (N - 1) * espacio;
+
+		int inicioX = (GetScreenWidth() - anchoTablero) / 2;
+		int inicioY = 80;
+
+		int panelX = inicioX + anchoTablero + 40;
+		int panelY = inicioY;
+
+
 		BeginDrawing();
 		ClearBackground(fondo);
 
-		dibujarTablero(e);
-		dibujarPanel(e);
+		dibujarTablero(e, inicioX, inicioY, tam, espacio);
+		dibujarPanel(e, panelX, panelY);
 
+		int mensajeY = inicioY + anchoTablero + 40;
 		if (e->ganador) {
-			DrawText("Ganaste! (ENTER)", 200, 400, 32, YELLOW);
-		} else if (e->perdido) {
-			DrawText("Perdiste (ENTER)", 200, 400, 32, RED);
+			const char *txt = "Ganaste (ENTER)";
+			int w = MeasureText(txt, 32);
+			DrawText(txt, (GetScreenWidth() - w) / 2, mensajeY, 32, WHITE);
+		} 
+		
+		else if (e->perdido) {
+			const char *txt = "Perdiste! (ENTER)";
+			int w = MeasureText(txt, 32);
+			DrawText(txt, (GetScreenWidth() - w) / 2, mensajeY, 32, RED);
 		}
 
 		EndDrawing();
