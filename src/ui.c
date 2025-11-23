@@ -35,4 +35,27 @@ void dibujarTablero(estado *e) {
 	}
 }
 
+void ui_run(estado *e) {
+
+	InitWindow(760, 500, "Juego 2048");
+	SetTargetFPS(60);
+
+	float acumulador = 0; //guarda el tiempo
+
+	while (!WindowShouldClose()) {
+		float dt = GetFrameTime();
+		acumulador += dt;
+
+		if (acumulador >= 1.0f) { //aumenta el tiempo y reinicia el conteo
+			e->tiempo++;
+			acumulador = 0;
+		}
+
+		if (!e->ganador && !e->perdido) { //cuando se apretan las teclas de direccion
+			if (IsKeyPressed(KEY_LEFT)) mover(e, 'E');
+			if (IsKeyPressed(KEY_RIGHT)) mover(e, 'D');
+			if (IsKeyPressed(KEY_UP)) mover(e, 'A');
+			if (IsKeyPressed(KEY_DOWN)) mover (e, 'S');
+		}
+
 
