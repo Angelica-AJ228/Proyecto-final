@@ -98,9 +98,17 @@ void ui_run(estado *e) {
 		if (inicioX < 20) inicioX = 20; //minimo margen
 		int inicioY = 80;
 
-		int panelX = inicioX + anchoTablero + 40;
-		if (panelX + 220 > GetScreenWidth()) panelX = GetScreenWidth() - 240; //ajusta la ventana si es pequena
-		int panelY = inicioY;
+		int margen = 20;
+		int panelAncho = 220;
+		int panelX, panelY;
+
+		if (GetScreenWidth() >= anchoTablero + panelAncho + 3 * margen) {
+			panelX = inicioX + anchoTablero + margen;
+			panelY = inicioY;
+		} else {
+			panelX = (GetScreenWidth() - panelAncho) / 2;
+			panelY = inicioY + anchoTablero + margen;
+		}
 
 
 		BeginDrawing();
