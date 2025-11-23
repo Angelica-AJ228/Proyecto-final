@@ -60,7 +60,7 @@ void dibujarPanel(estado *e, int panelX, int panelY) {
 void ui_run(estado *e) {
 	
 	SetConfigFlags(FLAG_WINDOW_RESIZABLE);
-	InitWindow(760, 500, "Juego 2048");
+	InitWindow(800, 600, "Juego 2048"); //ventana inicial mas grande para que se vea completo sin expandir
 	SetTargetFPS(60);
 
 	float acumulador = 0; //guarda el tiempo
@@ -95,9 +95,11 @@ void ui_run(estado *e) {
 		int anchoTablero = N * tam + (N - 1) * espacio;
 
 		int inicioX = (GetScreenWidth() - anchoTablero) / 2;
+		if (inicioX < 20) inicioX = 20; //minimo margen
 		int inicioY = 80;
 
 		int panelX = inicioX + anchoTablero + 40;
+		if (panelX + 220 > GetScreenWidth()) panelX = GetScreenWidth() - 240; //ajusta la ventana si es pequena
 		int panelY = inicioY;
 
 
