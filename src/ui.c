@@ -58,4 +58,19 @@ void ui_run(estado *e) {
 			if (IsKeyPressed(KEY_DOWN)) mover (e, 'S');
 		}
 
+		if (e->ganador || e-> perdido) { //una vez se gana o pierde se puede reiniciar con Enter
+			if (IsKyPressed(KEY_ENTER)) {
+				guardarPuntaje(e->puntos);
+				TableroVacio(e)
+			}
+		}
+
+		BeginDrawing();
+		ClearBackground(fondo);
+
+		dibujarTablero(e);
+		dibujarPanel(e);
+
+
+
 
