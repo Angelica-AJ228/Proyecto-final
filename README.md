@@ -5,7 +5,8 @@ En este repositorio se puede encontrar un codigo en programacion C del juego 204
 Requisitos para instalar el juego:
 
 -La biblioteca Raylib: 
-	-Asegurarse de tener la version de Ubuntu .. y la version de Raylib ..
+	-Asegurarse de tener la version de Ubuntu 22.04.05 y la version de Raylib 5.5.0
+	-Puede que de errores al no tener pkg-config instalado, asegurate de tenerlo o puedes instalarlo con sudo apt install pkg-config
 
 Para compilar todo:
 
