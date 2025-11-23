@@ -5,6 +5,7 @@
 
 //función principal de Raylib
 void ui_run(estado *e);
+void dibujarPanel(estado *e);
 
 #endif
 
