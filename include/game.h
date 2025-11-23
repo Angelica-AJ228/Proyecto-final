@@ -26,8 +26,8 @@ ResultadoMovimiento VerificarMovimiento(int serie[N], int puntosActuales);
 void mover(estado *e, char direccion);
 void TableroVacio(estado *e);
 void generarAleatorio(estado *e);
-bool verificarGanador(estado *e)'
-bool movimientosDisponibles(estado *e)'
+bool verificarGanador(estado *e);
+bool movimientosDisponibles(estado *e);
 
 #endif
 
