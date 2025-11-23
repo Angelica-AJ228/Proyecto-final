@@ -35,6 +35,32 @@ void dibujarTablero(estado *e) {
 	}
 }
 
+void dibujarPanel(estado *e) {
+	
+	DrawRectangle(500, 80, 220, 300, panel);
+	char puntos[32];
+	
+	sprintf(puntos, "Puntos: %d", e->puntos);
+	DrawText(puntos, 520, 110, 22, WHITE);
+	
+	char tiempo[32];
+	sprintf(tiempo, "Tiempo: %d s", e->tiempo);
+	DrawText(tiempo, 520, 150, 22, WHITE);
+	
+	//top5
+	int top[5];
+	int cant = 0;
+	obtenerTop5(top, &cant);
+	
+	DrawText("Top 5:", 520, 200, 22, WHITE);
+	
+	for (int i = 0; i < cant; i++) {
+		char t[32];
+		sprintf(t, "%d. %d", i + 1, top[i]);
+		DrawText(t, 520, 230 + i * 30, 20, WHITE);
+	}
+}
+
 void ui_run(estado *e) {
 
 	InitWindow(760, 500, "Juego 2048");
@@ -61,7 +87,7 @@ void ui_run(estado *e) {
 		if (e->ganador || e->perdido) { //una vez se gana o pierde se puede reiniciar con Enter
 			if (IsKeyPressed(KEY_ENTER)) {
 				guardarPuntaje(e->puntos);
-				TableroVacio(e)
+				TableroVacio(e);
 			}
 		}
 
