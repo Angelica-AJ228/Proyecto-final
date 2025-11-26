@@ -4,6 +4,8 @@
 #include <raylib.h>
 #include <stdio.h>
 
+//Este codigo es la intefaz grafica por lo que se manejan colores, para ello tenemos las primeras cuatro variables
+
 static Color fondo = {4, 21, 61, 255}; 
 static Color colorCasilla = {237, 241, 245, 255};
 static Color colorNumero = {238, 108, 77, 255};
@@ -13,7 +15,7 @@ static Color panel = {60, 120, 170, 255};
 
 void dibujarTablero(estado *e, int inicioX, int inicioY, int tam, int espacio) {
 
-	for (int i = 0; i < N; i++) {
+	for (int i = 0; i < N; i++) { //marca los margenes para dibujar el tablero, esta en pixeles
 		for (int j = 0; j < N; j++) {
 			
 			int x = inicioX + j * (tam + espacio);
@@ -36,10 +38,10 @@ void dibujarPanel(estado *e, int panelX, int panelY) {
 	DrawRectangleRounded((Rectangle){panelX, panelY, 220, 300}, 0.25f, 12, panel);
 	char puntos[32];
 	
-	sprintf(puntos, "Puntos: %d", e->puntos);
+	sprintf(puntos, "Puntos: %d", e->puntos); //dibuja el texto en el panel de la derecha, puntos es el primero
 	DrawText(puntos, panelX + 20, panelY + 30, 22, WHITE);
 	
-	char tiempo[32];
+	char tiempo[32]; //dibuja el campo para el tiempo
 	sprintf(tiempo, "Tiempo: %d s", e->tiempo);
 	DrawText(tiempo, panelX + 20, panelY + 70, 22, WHITE);
 	
@@ -74,14 +76,14 @@ void ui_run(estado *e) {
 			acumulador = 0;
 		}
 
-		if (!e->ganador && !e->perdido) { //cuando se apretan las teclas de direccion
+		if (!e->ganador && !e->perdido) { //detecta cuando se apretan las teclas de direccion
 			if (IsKeyPressed(KEY_LEFT)) mover(e, 'E');
 			if (IsKeyPressed(KEY_RIGHT)) mover(e, 'D');
 			if (IsKeyPressed(KEY_UP)) mover(e, 'A');
 			if (IsKeyPressed(KEY_DOWN)) mover (e, 'S');
 		}
 
-		if (e->ganador || e->perdido) { //una vez se gana o pierde se puede reiniciar con Enter
+		if (e->ganador || e->perdido) { //una vez se gana o pierde se puede reiniciar con Enter, y solo con enter por eso hay una instruccion
 			if (IsKeyPressed(KEY_ENTER)) {
 				guardarPuntaje(e->puntos);
 				TableroVacio(e);
@@ -114,18 +116,18 @@ void ui_run(estado *e) {
 		BeginDrawing();
 		ClearBackground(fondo);
 
-		dibujarTablero(e, inicioX, inicioY, tam, espacio);
-		dibujarPanel(e, panelX, panelY);
+		dibujarTablero(e, inicioX, inicioY, tam, espacio); //aqui redibuja el tablero segun lo que se aumento
+		dibujarPanel(e, panelX, panelY);//aqui dibuja el panel
 
-		int mensajeY = inicioY + anchoTablero + 40;
+		int mensajeY = inicioY + anchoTablero + 40; //mensajes al final de cada partida
 		if (e->ganador) {
-			const char *txt = "Ganaste (ENTER)";
+			const char *txt = "Ganaste! (Presiona ENTER para guardar)";
 			int w = MeasureText(txt, 32);
-			DrawText(txt, (GetScreenWidth() - w) / 2, mensajeY, 32, WHITE);
+			DrawText(txt, (GetScreenWidth() - w) / 2, mensajeY, 32, WHITE); //posicion del texto
 		} 
 		
 		else if (e->perdido) {
-			const char *txt = "Perdiste! (ENTER)";
+			const char *txt = "Perdiste! (Presiona ENTER para guardar)";
 			int w = MeasureText(txt, 32);
 			DrawText(txt, (GetScreenWidth() - w) / 2, mensajeY, 32, RED);
 		}

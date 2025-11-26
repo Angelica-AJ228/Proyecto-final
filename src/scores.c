@@ -17,7 +17,7 @@ void obtenerTop5(int top[5], int *cantidad) {
 	int lista[200];
 	int n = 0;
 
-	FILE *f = fopen("puntuaciones.txt", "r");
+	FILE *f = fopen("puntuaciones.txt", "r"); //lee el .txt para ver cuantas puntuaciones hay registradas
 	if (f == NULL) {
 		*cantidad = 0;
 		return;
