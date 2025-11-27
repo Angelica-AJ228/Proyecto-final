@@ -1,0 +1,261 @@
+#include "../include/game.h"
+#include <stdlib.h>
+#include <stdbool.h>
+#include <time.h>
+
+// VerificarMovimiento
+// - Recibe arreglos de linea del tablero
+// - Desplaza numeros hacia la izquierda
+// - Suma numeros iguales
+// - Devuelve el nuevo arreglo de numeros, el puntaje y detecta si se hizo un movimiento o no
+//
+
+ResultadoMovimiento VerificarMovimiento(int serie[N], int puntosActuales) {
+	ResultadoMovimiento r;
+	int i, j;
+
+	for (i = 0; i < N; i++) {
+		r.nuevaSerie[i] = serie[i];
+	}
+
+	r.nuevosPuntos = puntosActuales;
+	r.movio = false;
+
+	//busca movimientos
+	
+	for (i = 0; i < N; i++) {
+		for (j = i + 1; j < N; j++) {
+			
+			if (r.nuevaSerie[j] == 0) {
+				continue;
+			}
+
+
+			if (r.nuevaSerie[i] == 0) {
+				r.nuevaSerie[i] = r.nuevaSerie[j];
+				r.nuevaSerie[j] = 0;
+				r.movio = true;
+				continue;
+			}
+		
+			if (r.nuevaSerie[i] == r.nuevaSerie[j]) {
+				int suma = r.nuevaSerie[i] + r.nuevaSerie[j];
+				r.nuevaSerie[i] = suma;
+				r.nuevaSerie[j] = 0;
+				r.nuevosPuntos += suma;
+				r.movio = true;
+				break;
+			}
+		
+			break;
+		}
+	}
+	
+	return r;
+}
+
+//funcion para reiniciar tablero
+
+void TableroVacio(estado *e) {
+	int i, j;
+
+	for (i = 0; i < N; i++) {
+		for (j = 0; j < N; j++) {
+			e->tabla2048[i][j] = 0;
+		}
+	}
+	
+	e->puntos = 0;
+	e->tiempo = 0;
+	e->ganador = false;
+	e->perdido = false;
+	generarAleatorio(e);
+	generarAleatorio(e);
+}
+
+
+//generar los numeros aleatorios
+
+void generarAleatorio(estado *e) {
+	
+	int libres[N*N];
+	int cantidad = 0;
+	int i, j;
+	
+	for (i = 0; i < N; i++) {
+		
+		for (j = 0; j < N; j++) {
+			if (e->tabla2048[i][j] == 0) {
+				libres[cantidad] = i * N + j;
+				cantidad++;
+			}
+		}
+	}
+	
+	if (cantidad == 0) return;
+	
+	int pos = rand() % cantidad;
+	int f = libres[pos] / N;
+	int c = libres[pos] % N;
+	int valor = (rand() % 10 < 6) ? 2 : 4; //proporcion de probabilidad de los numeros
+	
+	e->tabla2048[f][c] = valor;	
+}
+
+bool movimientosDisponibles(estado *e) {
+	
+	int i, j;
+	
+	//Revisa si hay espacios vacios
+	
+	for (i = 0; i < N; i++) {
+		for (j = 0; j < N; j++) {
+			if (e->tabla2048[i][j] == 0) {
+				return true;
+			}
+		}
+	}
+
+	//filas
+
+	for (i = 0; i < N; i++) {
+		for (j = 0; j < N - 1; j++) {
+			if (e->tabla2048[i][j] == e->tabla2048[i][j + 1]) {
+				return true;
+			}
+		}
+	}
+
+	//columnas
+	
+	for (j = 0; j < N; j++) {
+		
+		for (i = 0; i < N - 1; i++) {
+			if (e->tabla2048[i][j] == e->tabla2048[i + 1][j]) {
+				return true;
+			}
+		}
+	}
+	
+	return false;
+}
+
+bool verificarGanador(estado *e) {
+	
+	int i, j;
+	
+	for (i = 0; i < N; i++) {
+		for (j = 0; j < N; j++) {
+			if (e->tabla2048[i][j] == 2048) {
+				return true;
+			}
+		}
+	}
+	
+	return false;
+}
+
+void mover(estado *e, char direccion) {
+	
+	bool algoSeMovio = false;
+	
+	int i, j;
+	
+	for (i = 0; i < N; i++) {
+		int fila[N];
+		for (j = 0; j < N; j++) {
+			fila[j] = e->tabla2048[i][j];
+		}
+
+        //Izquierda
+	
+		if (direccion == 'E') {
+			ResultadoMovimiento r = VerificarMovimiento(fila, e->puntos);
+		
+			if (r.movio) {
+				algoSeMovio = true;
+				e->puntos = r.nuevosPuntos;
+			
+				for (j = 0; j < N; j++) {
+					e->tabla2048[i][j] = r.nuevaSerie[j];
+				}
+			}
+		}
+
+        	//derecha
+	
+		else if (direccion == 'D') {
+			int invertida[N];
+			for (j = 0; j < N; j++) {
+				invertida[j] = fila[N - 1 - j];
+			}
+		
+			ResultadoMovimiento r = VerificarMovimiento(invertida, e->puntos);
+			if (r.movio) {
+				algoSeMovio = true;
+				e->puntos = r.nuevosPuntos;
+			
+				for (j = 0; j < N; j++) {
+					e->tabla2048[i][N - 1 - j] = r.nuevaSerie[j];
+				}
+			}
+		}
+    	}
+	
+	
+	for (j = 0; j < N; j++) {
+		int columna[N];
+		
+		for (i = 0; i < N; i++) {
+			columna[i] = e->tabla2048[i][j];
+		}
+		
+		
+		//arriba
+		if (direccion == 'A') {
+			
+			ResultadoMovimiento r = VerificarMovimiento(columna, e->puntos);
+			
+			if (r.movio) {
+				algoSeMovio = true;
+				e->puntos = r.nuevosPuntos;
+				
+				for (i = 0; i < N; i++) {
+					e->tabla2048[i][j] = r.nuevaSerie[i];
+				}
+			}
+		}
+		
+		// abajo
+		
+		else if (direccion == 'S') {
+			int invertida[N];
+			for (i = 0; i < N; i++) {
+				invertida[i] = columna[N - 1 - i];
+			}
+			
+			ResultadoMovimiento r = VerificarMovimiento(invertida, e->puntos);
+			
+			if (r.movio) {
+				algoSeMovio = true;
+				e->puntos = r.nuevosPuntos;
+				
+				
+				for (int i = 0; i < N; i++) {
+					
+					e->tabla2048[N - 1 - i][j] = r.nuevaSerie[i];
+				}
+			}
+		}
+	}
+	
+	//si se movio, inserta nuevo
+	
+	if (algoSeMovio) generarAleatorio(e);
+	
+	// actualizar estados
+	
+	e->ganador = verificarGanador(e);
+	e->perdido = !movimientosDisponibles(e);
+}
+
